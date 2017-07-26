@@ -18,6 +18,8 @@ true            true             true
 .NOTES
 Created by: Jason Wasser @wasserja
 Modified: 7/26/2017 10:37:08 AM 
+
+* I found that the ConvertFrom-Json didn't work on PowerShell 4.0 with the conf file. I'm going to use the .NET framwork method.
 #>
 function Get-BitdefenderComponentStatus {
     [CmdletBinding()]
@@ -35,15 +37,9 @@ function Get-BitdefenderComponentStatus {
         $BitdefenderComponentStatusContent = Get-Content -Path $BitdefenderComponentStatusFile
         Write-Verbose -Message "PowerShell version $($PSVersionTable.PSVersion.Major) detected"
         
-        if ($PSVersionTable.PSVersion.Major -ge 3) {
-            $BitdefenderComponentStatusJson = $BitdefenderComponentStatusContent | ConvertFrom-Json
-        }
-        else {
-            [System.Reflection.Assembly]::LoadWithPartialName("System.Web.Extensions") | Out-Null
-            $Serializer = New-Object System.Web.Script.Serialization.JavaScriptSerializer
-            $BitdefenderComponentStatusJson = New-Object -TypeName PSCustomObject -Property $Serializer.DeserializeObject($BitdefenderComponentStatusContent)
-        }
-
+        [System.Reflection.Assembly]::LoadWithPartialName("System.Web.Extensions") | Out-Null
+        $Serializer = New-Object System.Web.Script.Serialization.JavaScriptSerializer
+        $BitdefenderComponentStatusJson = New-Object -TypeName PSCustomObject -Property $Serializer.DeserializeObject($BitdefenderComponentStatusContent)
         
         $BitdefenderComponentStatusProperties = @{
             AntispywareEnabled = $BitdefenderComponentStatusJson.'Product.ActionCenter'.aspyStatus
