@@ -145,7 +145,14 @@ function Test-Bitdefender {
                     Write-Verbose "Bitdefender signature date: $BitdefenderSignatureDate"
                     $BitdefenderUpdateFileData = Invoke-Command -Session $Session -ScriptBlock ${function:Get-BitdefenderUpdateFileData}
 
-                    $IsBitdefenderUptodate = (New-Timespan -Start $BitdefenderSignatureDate -End (Get-Date)).TotalDays -le 1
+
+                    if ($BitdefenderSignatureDate) {
+                        $IsBitdefenderUptodate = (New-Timespan -Start $BitdefenderSignatureDate -End (Get-Date)).TotalDays -le 1
+                    }
+                    else {
+                        $IsBitdefenderUptodate = (New-Timespan -Start $BitdefenderUpdateFileData.'Update time' -End (Get-Date)).TotalDays -le 1
+                        
+                    }
 
                     # Check Bitdefender component status
                     Write-Verbose -Message "Checking Bitdefender component status"
@@ -175,7 +182,7 @@ function Test-Bitdefender {
                     IsBitdefenderAntivirusEnabled   = $BitdefenderComponentStatus.AntivirusEnabled
                     IsBitdefenderAntispywareEnabled = $BitdefenderComponentStatus.AntispywareEnabled
                     IsBitdefenderFirewallEnabled    = $BitdefenderComponentStatus.FirewallEnabled
-                    IsBitdefenderHealthy            = $IsBitdefenderInstalled -and $IsBitdefenderProcessRunning -and $IsBitdefenderServiceHealthy -and $IsBitdefenderComponentStatusHealthy
+                    IsBitdefenderHealthy            = $IsBitdefenderInstalled -and $IsBitdefenderProcessRunning -and $IsBitdefenderServiceHealthy -and $IsBitdefenderComponentStatusHealthy -and $IsBitdefenderUptodate
                     SignatureVersion                = $BitdefenderUpdateFileData.Version
                     SignatureNumber                 = $BitdefenderUpdateFileData.'Signature Number'
                     SignatureDate                   = $BitdefenderSignatureDate

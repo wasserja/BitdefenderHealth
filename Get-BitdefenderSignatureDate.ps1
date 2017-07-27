@@ -20,7 +20,7 @@ Modified: 7/26/2017 10:45:21 AM
 function Get-BitdefenderSignatureDate {
     [CmdletBinding()]
     param (
-        $TimeZone = [System.TimeZoneInfo]::Local.Id
+        $TimeZone = (Get-WmiObject -Class win32_timezone | Select-Object -ExpandProperty StandardName)
     )
     
     begin {
@@ -28,12 +28,20 @@ function Get-BitdefenderSignatureDate {
     
     process {
         $BitdefenderThreatScannerPath = 'C:\Program Files\Bitdefender\Endpoint Security\ThreatScanner'
-        $BitdefenderUpdatePath = Get-Item -Path "$BitdefenderThreatScannerPath\Antivirus*\versions.id*"
-        [xml]$BitdefenderVersionsFile = Get-Content -Path $BitdefenderUpdatePath
+        try {
+            $BitdefenderUpdatePath = Get-Item -Path "$BitdefenderThreatScannerPath\Antivirus*\versions.id*"
+            [xml]$BitdefenderVersionsFile = Get-Content -Path $BitdefenderUpdatePath
         
-        # Bitdefender headquarters is in Eastern European Time Zone which also has daylight saving time.
-        $BitdefenderSignatureDate = Convert-TimeZone -inputDateTime ([datetime]$BitdefenderVersionsFile.info.time.'#text') -fromTimeZone 'E. Europe Standard Time' -toTimeZone $TimeZone
-        $BitdefenderSignatureDate
+            # Bitdefender headquarters is in Eastern European Time Zone which also has daylight saving time.
+            $BitdefenderSignatureDate = Convert-TimeZone -inputDateTime ([datetime]$BitdefenderVersionsFile.info.time.'#text') -fromTimeZone 'E. Europe Standard Time' -toTimeZone $TimeZone
+            $BitdefenderSignatureDate
+        }
+        catch {
+            Write-Warning -Message "Unable to determine the signature date."
+            $BitdefenderSignatureDate = $null
+            $BitdefenderSignatureDate
+        }
+        
     }
     
     end {
