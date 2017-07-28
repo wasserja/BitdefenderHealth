@@ -20,7 +20,7 @@ Modified: 7/26/2017 10:45:21 AM
 function Get-BitdefenderSignatureDate {
     [CmdletBinding()]
     param (
-        $TimeZone = (Get-WmiObject -Class win32_timezone | Select-Object -ExpandProperty StandardName)
+        $TimeZone = [System.TimeZoneInfo]::Local.Id
     )
     
     begin {
