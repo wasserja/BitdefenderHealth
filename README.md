@@ -4,12 +4,12 @@ A collection of functions to test the health of a Bitdefender Endpoint Security 
 <pre>
 CommandType Name                           Version Source
 ----------- ----                           ------- ------
-Function    Convert-TimeZone               1.0.4   BitdefenderHealth
-Function    Convert-UnixTimeToDateTime     1.0.4   BitdefenderHealth
-Function    Get-BitdefenderComponentStatus 1.0.4   BitdefenderHealth
-Function    Get-BitdefenderSignatureDate   1.0.4   BitdefenderHealth
-Function    Get-BitdefenderUpdateFileData  1.0.4   BitdefenderHealth
-Function    Import-SessionFunction         1.0.4   BitdefenderHealth
-Function    Test-Bitdefender               1.0.4   BitdefenderHealth
-Function    Test-Service                   1.0.4   BitdefenderHealth
+Function    Convert-TimeZone               1.0.5   BitdefenderHealth
+Function    Convert-UnixTimeToDateTime     1.0.5   BitdefenderHealth
+Function    Get-BitdefenderComponentStatus 1.0.5   BitdefenderHealth
+Function    Get-BitdefenderSignatureDate   1.0.5   BitdefenderHealth
+Function    Get-BitdefenderUpdateFileData  1.0.5   BitdefenderHealth
+Function    Import-SessionFunction         1.0.5   BitdefenderHealth
+Function    Test-Bitdefender               1.0.5   BitdefenderHealth
+Function    Test-Service                   1.0.5   BitdefenderHealth
 </pre>

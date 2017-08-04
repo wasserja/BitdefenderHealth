@@ -191,6 +191,11 @@ function Test-Bitdefender {
                 }
                 $BitdefenderStatus = New-Object -TypeName PSCustomObject -Property $BitdefenderStatusProperties
                 $BitdefenderStatus
+
+                # Clear Variables
+                $BitdefenderComponentStatus = $null
+                $BitdefenderUpdateFileData = $null
+                $BitdefenderSignatureDate = $null
             }
             catch {
                 Write-Error -Message $_.Exception
